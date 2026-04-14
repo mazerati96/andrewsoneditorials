@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Services — Andrewson Editorials</title>
+    <meta name="description" content="Professional beta reading, developmental editing, line editing, copy editing, proofreading, and formatting services for writers." />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+        /* ── Service detail cards ── */
+        .service-detail-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            transition: box-shadow var(--transition), transform var(--transition);
+            display: flex;
+            flex-direction: column;
+        }
+
+            .service-detail-card:hover {
+                box-shadow: var(--shadow-md);
+                transform: translateY(-4px);
+            }
+
+        .service-detail-card__header {
+            background: var(--navy);
+            padding: 2rem 2rem 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .service-detail-card__header::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 3px;
+                background: linear-gradient(90deg, var(--red), transparent);
+            }
+
+        .service-detail-card__emoji {
+            font-size: 2.25rem;
+            display: block;
+            margin-bottom: 0.75rem;
+        }
+
+        .service-detail-card__header h3 {
+            color: var(--white);
+            font-size: 1.35rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .service-detail-card__tagline {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.85rem;
+            font-family: var(--font-body);
+        }
+
+        .service-detail-card__body {
+            padding: 1.75rem 2rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .service-detail-card__desc {
+            color: var(--body-text);
+            font-size: 0.97rem;
+            line-height: 1.75;
+            margin-bottom: 1.25rem;
+        }
+
+        .service-includes {
+            list-style: none;
+            margin-bottom: 1.5rem;
+            flex: 1;
+        }
+
+            .service-includes li {
+                font-size: 0.88rem;
+                color: var(--muted-text);
+                padding: 0.3rem 0;
+                display: flex;
+                align-items: flex-start;
+                gap: 0.6rem;
+            }
+
+                .service-includes li::before {
+                    content: '✓';
+                    color: var(--red);
+                    font-weight: 700;
+                    flex-shrink: 0;
+                    margin-top: 0.05rem;
+                }
+
+        .service-detail-card__footer {
+            border-top: 1px solid var(--border);
+            padding: 1.25rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .service-price {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .service-price__label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--muted-text);
+        }
+
+        .service-price__amount {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--navy);
+        }
+
+        .service-price__note {
+            font-size: 0.75rem;
+            color: var(--muted-text);
+        }
+
+        /* ── How pricing works ── */
+        .pricing-info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .pricing-info-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 1.75rem;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .pricing-info-card__icon {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+            display: block;
+        }
+
+        .pricing-info-card h4 {
+            font-size: 1rem;
+            margin-bottom: 0.4rem;
+            color: var(--navy);
+        }
+
+        .pricing-info-card p {
+            font-size: 0.88rem;
+            color: var(--muted-text);
+        }
+
+        /* ── FAQ ── */
+        .faq-list {
+            max-width: 760px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid var(--border);
+        }
+
+            .faq-item:first-child {
+                border-top: 1px solid var(--border);
+            }
+
+        .faq-question {
+            width: 100%;
+            background: none;
+            border: none;
+            text-align: left;
+            padding: 1.25rem 0;
+            font-family: var(--font-display);
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--navy);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+            .faq-question:hover {
+                color: var(--red);
+            }
+
+        .faq-toggle {
+            font-size: 1.4rem;
+            font-weight: 300;
+            color: var(--red);
+            transition: transform var(--transition);
+            flex-shrink: 0;
+            line-height: 1;
+        }
+
+        .faq-item.open .faq-toggle {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            display: none;
+            padding: 0 0 1.25rem;
+            color: var(--muted-text);
+            font-size: 0.95rem;
+            line-height: 1.75;
+        }
+
+        .faq-item.open .faq-answer {
+            display: block;
+        }
+
+        @media (max-width: 900px) {
+            .pricing-info-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 580px) {
+            .pricing-info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========== NAVIGATION ========== -->
+    <nav class="nav" role="navigation" aria-label="Main navigation">
+        <div class="nav__inner">
+            <a href="index.html" class="nav__logo" aria-label="Andrewson Editorials Home">
+                <img src="andrewson.jpg" alt="Andrewson Editorials" />
+            </a>
+            <ul class="nav__links" id="navLinks" role="list">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="services.html" class="active">Services</a></li>
+                <li><a href="portfolio.html">Portfolio</a></li>
+                <li><a href="reviews.html">Reviews</a></li>
+                <li><a href="hire-me.html">Hire Me</a></li>
+                <li><a href="login.html" class="nav__cta btn btn-primary" style="padding:0.55rem 1.25rem; letter-spacing:0.04em;">Editor Sign In</a></li>
+            </ul>
+            <button class="nav__hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ========== PAGE HERO ========== -->
+    <section class="page-hero">
+        <div class="container">
+            <div class="hero__eyebrow animate-fade-up">
+                <span class="hero__eyebrow-line"></span>
+                <span>What I Offer</span>
+            </div>
+            <h1 class="animate-fade-up animate-delay-1">Services</h1>
+            <p class="lead animate-fade-up animate-delay-2">
+                Six services, one goal — helping your manuscript become everything it's
+                capable of being. Every project is quoted individually based on word count,
+                scope, and timeline.
+            </p>
+        </div>
+    </section>
+
+    <hr class="divider--red" />
+
+    <!-- ========== SERVICE CARDS ========== -->
+    <section class="section section--cream">
+        <div class="container">
+            <div class="grid-3">
+
+                <!-- 1. Beta Reading -->
+                <div class="service-detail-card">
+                    <div class="service-detail-card__header">
+                        <span class="service-detail-card__emoji">📖</span>
+                        <h3>Beta Reading</h3>
+                        <span class="service-detail-card__tagline">The full reader experience</span>
+                    </div>
+                    <div class="service-detail-card__body">
+                        <p class="service-detail-card__desc">
+                            I read your manuscript cover to cover as an engaged reader and report
+                            back on everything — what worked, what didn't, and why. Ideal for
+                            writers who want an honest reader's perspective before querying or publishing.
+                        </p>
+                        <ul class="service-includes">
+                            <li>Full manuscript read-through</li>
+                            <li>Detailed reader report (pacing, plot, character, world-building)</li>
+                            <li>Emotional resonance & engagement notes</li>
+                            <li>Plot hole & continuity flags</li>
+                            <li>Overall impression & recommendations</li>
+                        </ul>
+                    </div>
+                    <div class="service-detail-card__footer">
+                        <div class="service-price">
+                            <span class="service-price__label">Starting from</span>
+                            <!-- PLACEHOLDER: Replace with real rate -->
+                            <span class="service-price__amount">Custom quote</span>
+                            <span class="service-price__note">Based on word count</span>
+                        </div>
+                        <a href="hire-me.html" class="btn btn-primary">Get a Quote</a>
+                    </div>
+                </div>
+
+                <!-- 2. Developmental Editing -->
+                <div class="service-detail-card">
+                    <div class="service-detail-card__header">
+                        <span class="service-detail-card__emoji">✏️</span>
+                        <h3>Developmental Editing</h3>
+                        <span class="service-detail-card__tagline">Big-picture structure & story</span>
+                    </div>
+                    <div class="service-detail-card__body">
+                        <p class="service-detail-card__desc">
+                            A deep structural edit that examines the foundations of your story.
+                            Best for manuscripts that are complete but need significant reworking
+                            of plot, character, or narrative architecture.
+                        </p>
+                        <ul class="service-includes">
+                            <li>Story structure & arc analysis</li>
+                            <li>Character motivation & development</li>
+                            <li>Theme & subtext evaluation</li>
+                            <li>Pacing & chapter-by-chapter notes</li>
+                            <li>Comprehensive editorial letter</li>
+                        </ul>
+                    </div>
+                    <div class="service-detail-card__footer">
+                        <div class="service-price">
+                            <span class="service-price__label">Starting from</span>
+                            <span class="service-price__amount">Custom quote</span>
+                            <span class="service-price__note">Based on word count</span>
+                        </div>
+                        <a href="hire-me.html" class="btn btn-primary">Get a Quote</a>
+                    </div>
+                </div>
+
+                <!-- 3. Line Editing -->
+                <div class="service-detail-card">
+                    <div class="service-detail-card__header">
+                        <span class="service-detail-card__emoji">🔍</span>
+                        <h3>Line Editing</h3>
+                        <span class="service-detail-card__tagline">Voice, clarity & style</span>
+                    </div>
+                    <div class="service-detail-card__body">
+                        <p class="service-detail-card__desc">
+                            A sentence-level pass that sharpens your prose while preserving your
+                            unique voice. Ideal for manuscripts with a solid structure that need
+                            their writing lifted to the next level.
+                        </p>
+                        <ul class="service-includes">
+                            <li>Sentence clarity & rhythm</li>
+                            <li>Voice consistency throughout</li>
+                            <li>Show vs. tell guidance</li>
+                            <li>Dialogue & exposition balance</li>
+                            <li>Word-level precision notes</li>
+                        </ul>
+                    </div>
+                    <div class="service-detail-card__footer">
+                        <div class="service-price">
+                            <span class="service-price__label">Starting from</span>
+                            <span class="service-price__amount">Custom quote</span>
+                            <span class="service-price__note">Based on word count</span>
+                        </div>
+                        <a href="hire-me.html" class="btn btn-primary">Get a Quote</a>
+                    </div>
+                </div>
+
+                <!-- 4. Copy Editing -->
+                <div class="service-detail-card">
+                    <div class="service-detail-card__header">
+                        <span class="service-detail-card__emoji">✂️</span>
+                        <h3>Copy Editing</h3>
+                        <span class="service-detail-card__tagline">Grammar, consistency & accuracy</span>
+                    </div>
+                    <div class="service-detail-card__body">
+                        <p class="service-detail-card__desc">
+                            The technical layer that makes your manuscript airtight. A thorough
+                            copy edit catches grammatical errors, inconsistencies, and unclear
+                            passages before they reach your reader.
+                        </p>
+                        <ul class="service-includes">
+                            <li>Grammar, spelling & punctuation</li>
+                            <li>Style & tense consistency</li>
+                            <li>Character name & detail continuity</li>
+                            <li>Sentence structure & syntax</li>
+                            <li>Fact & logic checks</li>
+                        </ul>
+                    </div>
+                    <div class="service-detail-card__footer">
+                        <div class="service-price">
+                            <span class="service-price__label">Starting from</span>
+                            <span class="service-price__amount">Custom quote</span>
+                            <span class="service-price__note">Based on word count</span>
+                        </div>
+                        <a href="hire-me.html" class="btn btn-primary">Get a Quote</a>
+                    </div>
+                </div>
+
+                <!-- 5. Proofreading -->
+                <div class="service-detail-card">
+                    <div class="service-detail-card__header">
+                        <span class="service-detail-card__emoji">🧐</span>
+                        <h3>Proofreading</h3>
+                        <span class="service-detail-card__tagline">The final pre-publication pass</span>
+                    </div>
+                    <div class="service-detail-card__body">
+                        <p class="service-detail-card__desc">
+                            Your last line of defence before the world sees your work. A proofread
+                            catches anything that slipped through earlier edits — typos, formatting
+                            quirks, repeated words, and final polish.
+                        </p>
+                        <ul class="service-includes">
+                            <li>Typo & spelling corrections</li>
+                            <li>Punctuation & spacing errors</li>
+                            <li>Repeated word & phrase flags</li>
+                            <li>Formatting inconsistencies</li>
+                            <li>Final readiness assessment</li>
+                        </ul>
+                    </div>
+                    <div class="service-detail-card__footer">
+                        <div class="service-price">
+                            <span class="service-price__label">Starting from</span>
+                            <span class="service-price__amount">Custom quote</span>
+                            <span class="service-price__note">Based on word count</span>
+                        </div>
+                        <a href="hire-me.html" class="btn btn-primary">Get a Quote</a>
+                    </div>
+                </div>
+
+                <!-- 6. Formatting -->
+                <div class="service-detail-card">
+                    <div class="service-detail-card__header">
+                        <span class="service-detail-card__emoji">📐</span>
+                        <h3>Formatting</h3>
+                        <span class="service-detail-card__tagline">Submission & publication ready</span>
+                    </div>
+                    <div class="service-detail-card__body">
+                        <p class="service-detail-card__desc">
+                            Manuscript formatted to industry standards — whether you're sending
+                            to literary agents, submitting to publishers, or uploading to a
+                            self-publishing platform like KDP or IngramSpark.
+                        </p>
+                        <ul class="service-includes">
+                            <li>Standard manuscript format (SMF)</li>
+                            <li>Agent / publisher submission formatting</li>
+                            <li>KDP & IngramSpark upload formatting</li>
+                            <li>Chapter headers & scene breaks</li>
+                            <li>Front & back matter layout</li>
+                        </ul>
+                    </div>
+                    <div class="service-detail-card__footer">
+                        <div class="service-price">
+                            <span class="service-price__label">Starting from</span>
+                            <span class="service-price__amount">Custom quote</span>
+                            <span class="service-price__note">Flat project rate</span>
+                        </div>
+                        <a href="hire-me.html" class="btn btn-primary">Get a Quote</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- ========== HOW PRICING WORKS ========== -->
+    <section class="section section--white">
+        <div class="container">
+            <div class="section-header centered">
+                <span class="section-label">Pricing</span>
+                <h2>How it works</h2>
+                <p>Every project is different, so every quote is too. Here's what goes into it.</p>
+            </div>
+
+            <div class="pricing-info-grid">
+                <div class="pricing-info-card">
+                    <span class="pricing-info-card__icon">📏</span>
+                    <h4>Word Count</h4>
+                    <p>Most editorial services are priced per word. The longer the manuscript, the more time it takes — and the quote reflects that fairly.</p>
+                </div>
+                <div class="pricing-info-card">
+                    <span class="pricing-info-card__icon">🔧</span>
+                    <h4>Scope of Work</h4>
+                    <p>A light proofread is priced differently to a full developmental edit. The depth of the service determines the rate.</p>
+                </div>
+                <div class="pricing-info-card">
+                    <span class="pricing-info-card__icon">📅</span>
+                    <h4>Timeline</h4>
+                    <p>Standard turnaround is included in all quotes. Rush requests may affect pricing — always best to book early!</p>
+                </div>
+            </div>
+
+            <div class="text-center mt-5">
+                <p style="color:var(--muted-text); margin-bottom:1.5rem; max-width:520px; margin-left:auto; margin-right:auto;">
+                    Not sure which service you need? Fill out the inquiry form and describe
+                    your manuscript — I'll recommend the right service and send a no-obligation quote.
+                </p>
+                <a href="hire-me.html" class="btn btn-primary btn-lg">Request a Quote</a>
+            </div>
+        </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- ========== FAQ ========== -->
+    <section class="section section--cream">
+        <div class="container">
+            <div class="section-header centered">
+                <span class="section-label">FAQ</span>
+                <h2>Questions writers ask most</h2>
+            </div>
+
+            <div class="faq-list">
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        What's the difference between beta reading and developmental editing?
+                        <span class="faq-toggle">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        Beta reading gives you a reader's honest experience of your manuscript — what worked emotionally,
+                        what confused them, where they got bored. Developmental editing goes deeper: it diagnoses
+                        structural problems and offers specific, actionable suggestions for how to fix them.
+                        Think of beta reading as the diagnosis and developmental editing as the treatment plan.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Do I need all six services, or just one?
+                        <span class="faq-toggle">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        Most manuscripts only need one or two services depending on where they are in the writing process.
+                        Early drafts benefit most from beta reading or developmental editing. Later drafts benefit from
+                        line editing and copy editing. Proofreading and formatting come right at the end. When you fill
+                        out the inquiry form, I'll recommend the right fit based on your manuscript's stage.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        How long does each service take?
+                        <span class="faq-toggle">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        Turnaround times vary by manuscript length and current workload. As a general guide:
+                        beta reads typically take 2–4 weeks; developmental edits 3–5 weeks; line and copy edits 2–4 weeks;
+                        proofreads and formatting 1–2 weeks. I'll give you a firm timeline estimate in your quote.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Is my manuscript kept confidential?
+                        <span class="faq-toggle">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        Absolutely. Your manuscript is only ever seen by me, and I treat every project with
+                        complete confidentiality. I'm happy to sign an NDA before we begin if that gives you
+                        additional peace of mind.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        What genres do you work with?
+                        <span class="faq-toggle">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        I work across most fiction genres including fantasy, science fiction, YA, literary fiction,
+                        romance, thriller, horror, contemporary fiction, mystery, and new adult. If your genre
+                        isn't listed, reach out anyway — I may still be a good fit.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        Do you offer sample edits before I commit?
+                        <span class="faq-toggle">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        Yes! For larger projects I'm happy to do a sample edit of the first chapter or first
+                        1,000 words so you can see my style and approach before committing. Just mention this
+                        when you fill out the inquiry form.
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== CTA ========== -->
+    <section class="section section--navy">
+        <div class="container text-center">
+            <span class="section-label" style="color:rgba(255,255,255,0.5);">Ready?</span>
+            <h2 style="color:var(--white); margin-bottom:0.75rem;">Let's talk about your manuscript.</h2>
+            <p style="color:rgba(255,255,255,0.65); max-width:480px; margin:0 auto 2rem;">
+                Fill out the form — I'll come back to you within 2–3 business days with a
+                personalised recommendation and quote.
+            </p>
+            <a href="hire-me.html" class="btn btn-primary btn-lg">Get in Touch</a>
+        </div>
+    </section>
+
+    <!-- ========== FOOTER ========== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__inner">
+                <div class="footer__brand">
+                    <img src="andrewson.jpg" alt="Andrewson Editorials" />
+                    <p>Thoughtful editorial services for writers who care about their craft.</p>
+                </div>
+                <div class="footer__col">
+                    <h5>Navigate</h5>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="services.html">Services</a></li>
+                        <li><a href="portfolio.html">Portfolio</a></li>
+                        <li><a href="reviews.html">Reviews</a></li>
+                        <li><a href="hire-me.html">Hire Me</a></li>
+                    </ul>
+                </div>
+                <div class="footer__col">
+                    <h5>Connect</h5>
+                    <ul>
+                        <li><a href="https://x.com/editorial_buddy" target="_blank" rel="noopener">Twitter / X</a></li>
+                        <li><a href="#" target="_blank" rel="noopener">Instagram</a></li>
+                        <li><a href="https://goodreads.com/andrewsoneditorial" target="_blank" rel="noopener">Goodreads</a></li>
+                        <li><a href="https://www.tiktok.com/@andrewsoneditorials" target="_blank" rel="noopener">TikTok</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer__bottom">
+                <span>&copy; <span id="year"></span> Andrewson Editorials. All rights reserved.</span>
+                <span>Built with care.</span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+    // FAQ accordion
+    document.querySelectorAll('.faq-question').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.closest('.faq-item');
+        const isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+        if (!isOpen) item.classList.add('open');
+      });
+    });
+    </script>
+</body>
+</html>

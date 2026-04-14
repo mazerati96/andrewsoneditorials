@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard — Andrewson Editorials</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+        /* ---- Dashboard-specific overrides ---- */
+        body {
+            background: var(--cream);
+        }
+
+        .dash-topbar {
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            height: var(--nav-height);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .dash-topbar__logo img {
+            height: 36px;
+        }
+
+        .dash-topbar__right {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .dash-topbar__user {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--navy);
+        }
+
+        .dash-tab-bar {
+            display: flex;
+            gap: 0;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 2rem;
+            background: var(--white);
+            border-radius: var(--radius-md) var(--radius-md) 0 0;
+            overflow: hidden;
+        }
+
+        .dash-tab {
+            padding: 1rem 1.75rem;
+            font-family: var(--font-body);
+            font-size: 0.88rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--muted-text);
+            border: none;
+            background: none;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+            transition: color var(--transition), border-color var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+            .dash-tab:hover {
+                color: var(--navy);
+            }
+
+            .dash-tab.active {
+                color: var(--navy);
+                border-bottom-color: var(--red);
+            }
+
+            .dash-tab .tab-count {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                min-width: 20px;
+                height: 20px;
+                padding: 0 5px;
+                border-radius: 100px;
+                font-size: 0.72rem;
+                font-weight: 700;
+            }
+
+            .dash-tab.active .tab-count {
+                background: var(--red);
+                color: var(--white);
+            }
+
+            .dash-tab:not(.active) .tab-count {
+                background: var(--border);
+                color: var(--muted-text);
+            }
+
+        .dash-panel {
+            display: none;
+        }
+
+            .dash-panel.active {
+                display: block;
+            }
+
+        /* Review management card */
+        .review-manage-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 1.5rem 2rem;
+            margin-bottom: 1rem;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 1rem;
+            align-items: start;
+            box-shadow: var(--shadow-sm);
+            transition: box-shadow var(--transition);
+        }
+
+            .review-manage-card:hover {
+                box-shadow: var(--shadow-md);
+            }
+
+        .review-manage-card__meta {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .review-manage-card__stars {
+            color: var(--red);
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+        }
+
+        .review-manage-card__text {
+            font-family: var(--font-display);
+            font-style: italic;
+            color: var(--body-text);
+            font-size: 0.98rem;
+            line-height: 1.65;
+            margin: 0.35rem 0 0.75rem;
+        }
+
+        .review-manage-card__author {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--navy);
+        }
+
+        .review-manage-card__date {
+            font-size: 0.78rem;
+            color: var(--muted-text);
+            margin-top: 0.15rem;
+        }
+
+        .review-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            flex-shrink: 0;
+        }
+
+            .review-actions .btn {
+                padding: 0.5rem 1.1rem;
+                font-size: 0.82rem;
+            }
+
+        /* Stat cards */
+        .dash-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .dash-stat-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 1.5rem 1.75rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .dash-stat-card__number {
+            font-family: var(--font-display);
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--navy);
+            line-height: 1;
+            margin-bottom: 0.25rem;
+        }
+
+        .dash-stat-card__label {
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--muted-text);
+        }
+
+        .dash-stat-card__accent {
+            height: 3px;
+            background: linear-gradient(90deg, var(--navy), var(--red));
+            border-radius: 2px;
+            margin-bottom: 1rem;
+        }
+
+        /* Empty state inside panels */
+        .panel-empty {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--muted-text);
+        }
+
+            .panel-empty div {
+                font-size: 2.5rem;
+                margin-bottom: 0.75rem;
+            }
+
+        /* Inquiry cards */
+        .inquiry-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 1.5rem 2rem;
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .inquiry-card__header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .inquiry-card__name {
+            font-weight: 700;
+            color: var(--navy);
+            font-size: 1rem;
+        }
+
+        .inquiry-card__email {
+            font-size: 0.85rem;
+            color: var(--muted-text);
+            margin-top: 0.1rem;
+        }
+
+        .inquiry-card__body {
+            font-size: 0.95rem;
+            color: var(--body-text);
+            border-top: 1px solid var(--border);
+            padding-top: 0.75rem;
+            margin-top: 0.75rem;
+        }
+
+        @media (max-width: 640px) {
+            .dash-stats {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .review-manage-card {
+                grid-template-columns: 1fr;
+            }
+
+            .review-actions {
+                flex-direction: row;
+            }
+
+            .dash-tab {
+                padding: 0.9rem 1rem;
+                font-size: 0.78rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========== DASHBOARD TOPBAR ========== -->
+    <header class="dash-topbar">
+        <a href="index.html" class="dash-topbar__logo">
+            <img src="andrewson.jpg" alt="Andrewson Editorials" />
+        </a>
+        <div class="dash-topbar__right">
+            <span class="dash-topbar__user" id="dashUserEmail"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4f2a2b263b203d0f2e212b3d2a383c20212a2b263b203d262e233c612c2022">[email&#160;protected]</a></span>
+            <button class="btn btn-outline" id="logoutBtn" style="padding:0.45rem 1rem; font-size:0.82rem;">
+                Sign Out
+            </button>
+        </div>
+    </header>
+
+    <!-- ========== DASHBOARD CONTENT ========== -->
+    <main style="max-width: var(--max-width); margin: 0 auto; padding: 2.5rem 2rem;">
+
+        <div style="margin-bottom:2rem;">
+            <span class="section-label">Admin</span>
+            <h2 style="margin-top:0.25rem;">Dashboard</h2>
+        </div>
+
+        <!-- STATS -->
+        <div class="dash-stats">
+            <div class="dash-stat-card">
+                <div class="dash-stat-card__accent"></div>
+                <div class="dash-stat-card__number" id="statPending">2</div>
+                <div class="dash-stat-card__label">Pending Reviews</div>
+            </div>
+            <div class="dash-stat-card">
+                <div class="dash-stat-card__accent"></div>
+                <div class="dash-stat-card__number" id="statApproved">6</div>
+                <div class="dash-stat-card__label">Approved Reviews</div>
+            </div>
+            <div class="dash-stat-card">
+                <div class="dash-stat-card__accent"></div>
+                <div class="dash-stat-card__number" id="statInquiries">3</div>
+                <div class="dash-stat-card__label">New Inquiries</div>
+            </div>
+        </div>
+
+        <!-- TABS -->
+        <div class="dash-tab-bar">
+            <button class="dash-tab active" data-panel="pending">
+                Pending Reviews <span class="tab-count" id="tabCountPending">2</span>
+            </button>
+            <button class="dash-tab" data-panel="approved">
+                Approved Reviews <span class="tab-count" id="tabCountApproved">6</span>
+            </button>
+            <button class="dash-tab" data-panel="inquiries">
+                Inquiries <span class="tab-count" id="tabCountInquiries">3</span>
+            </button>
+        </div>
+
+        <!-- PANEL: Pending Reviews -->
+        <div class="dash-panel active" id="panel-pending">
+
+            <!-- Mock pending review 1 -->
+            <div class="review-manage-card" data-id="mock-1">
+                <div>
+                    <div class="review-manage-card__meta">
+                        <span class="review-manage-card__stars">★★★★★</span>
+                        <span class="badge badge-pending">Pending</span>
+                    </div>
+                    <p class="review-manage-card__text">
+                        "Andrew really understood the emotional core of my story in a way I hadn't
+                        expected. The beta read was worth every penny — I felt genuinely seen as a writer."
+                    </p>
+                    <div class="review-manage-card__author">L. Adeyemi — Horror / Dark Fantasy</div>
+                    <div class="review-manage-card__date">Submitted: March 28, 2026</div>
+                </div>
+                <div class="review-actions">
+                    <button class="btn btn-primary" onclick="approveReview('mock-1')">✓ Approve</button>
+                    <button class="btn btn-outline" style="border-color:var(--red); color:var(--red);" onclick="deleteReview('mock-1', 'pending')">✕ Delete</button>
+                </div>
+            </div>
+
+            <!-- Mock pending review 2 -->
+            <div class="review-manage-card" data-id="mock-2">
+                <div>
+                    <div class="review-manage-card__meta">
+                        <span class="review-manage-card__stars">★★★★☆</span>
+                        <span class="badge badge-pending">Pending</span>
+                    </div>
+                    <p class="review-manage-card__text">
+                        "The line edit tightened up my prose considerably. A few notes took me a while
+                        to understand, but every single one made the book better in the end."
+                    </p>
+                    <div class="review-manage-card__author">P. Winters — Contemporary Fiction</div>
+                    <div class="review-manage-card__date">Submitted: March 29, 2026</div>
+                </div>
+                <div class="review-actions">
+                    <button class="btn btn-primary" onclick="approveReview('mock-2')">✓ Approve</button>
+                    <button class="btn btn-outline" style="border-color:var(--red); color:var(--red);" onclick="deleteReview('mock-2', 'pending')">✕ Delete</button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- PANEL: Approved Reviews -->
+        <div class="dash-panel" id="panel-approved">
+
+            <div class="review-manage-card" data-id="appr-1">
+                <div>
+                    <div class="review-manage-card__meta">
+                        <span class="review-manage-card__stars">★★★★★</span>
+                        <span class="badge badge-approved">Approved</span>
+                    </div>
+                    <p class="review-manage-card__text">
+                        "Working with Andrewson Editorials was exactly what my manuscript needed."
+                    </p>
+                    <div class="review-manage-card__author">S. Morgan — Fantasy</div>
+                    <div class="review-manage-card__date">Approved: March 10, 2026</div>
+                </div>
+                <div class="review-actions">
+                    <button class="btn btn-outline" style="border-color:var(--red); color:var(--red);" onclick="deleteReview('appr-1', 'approved')">✕ Delete</button>
+                </div>
+            </div>
+
+            <div class="review-manage-card" data-id="appr-2">
+                <div>
+                    <div class="review-manage-card__meta">
+                        <span class="review-manage-card__stars">★★★★★</span>
+                        <span class="badge badge-approved">Approved</span>
+                    </div>
+                    <p class="review-manage-card__text">
+                        "I've worked with several editors, but the attention to detail here was unmatched."
+                    </p>
+                    <div class="review-manage-card__author">T. Rivera — YA</div>
+                    <div class="review-manage-card__date">Approved: March 12, 2026</div>
+                </div>
+                <div class="review-actions">
+                    <button class="btn btn-outline" style="border-color:var(--red); color:var(--red);" onclick="deleteReview('appr-2', 'approved')">✕ Delete</button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- PANEL: Inquiries -->
+        <div class="dash-panel" id="panel-inquiries">
+            <p style="color:var(--muted-text); font-size:0.9rem; margin-bottom:1.5rem;">
+                These come in via your Google Form once it's connected.
+                Below are placeholder entries for layout reference.
+            </p>
+
+            <div class="inquiry-card">
+                <div class="inquiry-card__header">
+                    <div>
+                        <div class="inquiry-card__name">Cleo Fairbanks</div>
+                        <div class="inquiry-card__email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="8deee1e8e2cde8f5ece0fde1e8a3eee2e0">[email&#160;protected]</a></div>
+                    </div>
+                    <span class="badge badge-pending">New</span>
+                </div>
+                <div class="inquiry-card__body">
+                    <strong>Service:</strong> Beta Reading &amp; Developmental Editing<br />
+                    <strong>Genre:</strong> Adult Fantasy · <strong>Word count:</strong> ~94,000<br />
+                    <strong>Timeline:</strong> 6–8 weeks<br /><br />
+                    <em>
+                        "I've just finished my third draft and I'd love a fresh pair of eyes before
+                        I start querying. Happy to discuss rates!"
+                    </em>
+                </div>
+            </div>
+
+            <div class="inquiry-card">
+                <div class="inquiry-card__header">
+                    <div>
+                        <div class="inquiry-card__name">Damien Osei</div>
+                        <div class="inquiry-card__email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e98d8884808c87c786a98c91888499858cc78a8684">[email&#160;protected]</a></div>
+                    </div>
+                    <span class="badge badge-pending">New</span>
+                </div>
+                <div class="inquiry-card__body">
+                    <strong>Service:</strong> Proofreading<br />
+                    <strong>Genre:</strong> Literary Fiction · <strong>Word count:</strong> ~62,000<br />
+                    <strong>Timeline:</strong> 3–4 weeks<br /><br />
+                    <em>"I'm self-publishing and need a final proofread before uploading to KDP."</em>
+                </div>
+            </div>
+
+            <div class="inquiry-card">
+                <div class="inquiry-card__header">
+                    <div>
+                        <div class="inquiry-card__name">Yuki Tanaka</div>
+                        <div class="inquiry-card__email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e099958b89979289948593a08598818d908c85ce838f8d">[email&#160;protected]</a></div>
+                    </div>
+                    <span class="badge badge-pending">New</span>
+                </div>
+                <div class="inquiry-card__body">
+                    <strong>Service:</strong> Line Editing<br />
+                    <strong>Genre:</strong> Romance · <strong>Word count:</strong> ~78,000<br />
+                    <strong>Timeline:</strong> Flexible<br /><br />
+                    <em>"Looking for someone who really gets the romance genre. Your reviews sold me!"</em>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script src="script.js"></script>
+    <script type="module">
+        // ============================================
+        //  DASHBOARD — Firebase Auth + Firestore (live)
+        // ============================================
+        import { auth, db } from './firebase-config.js';
+        import { onAuthStateChanged, signOut } from
+            "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+        import {
+            collection, query, where, orderBy, getDocs,
+            doc, updateDoc, deleteDoc, serverTimestamp
+        } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+        // ---- Auth guard: redirect to login if not signed in ----
+        onAuthStateChanged(auth, user => {
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+            document.getElementById('dashUserEmail').textContent = user.email;
+            loadAllData();
+        });
+
+        // ---- Sign out ----
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+            await signOut(auth);
+            window.location.href = 'login.html';
+        });
+
+        // ---- Tab switching ----
+        document.querySelectorAll('.dash-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.dash-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.dash-panel').forEach(p => p.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById('panel-' + tab.dataset.panel).classList.add('active');
+            });
+        });
+
+        // ---- Load all data ----
+        async function loadAllData() {
+            await Promise.all([loadPending(), loadApproved()]);
+        }
+
+        // ---- Load pending reviews ----
+        async function loadPending() {
+            const panel = document.getElementById('panel-pending');
+            panel.innerHTML = '<p style="color:var(--muted-text); padding:1rem 0;">Loading…</p>';
+
+            try {
+                const q = query(
+                    collection(db, 'reviews'),
+                    where('status', '==', 'pending'),
+                    orderBy('submittedAt', 'desc')
+                );
+                const snap = await getDocs(q);
+
+                if (snap.empty) {
+                    panel.innerHTML = '<div class="panel-empty"><div>✅</div><h3>All clear!</h3><p>No pending reviews right now.</p></div>';
+                    updateCount('tabCountPending', 'statPending', 0);
+                    return;
+                }
+
+                panel.innerHTML = '';
+                snap.forEach(docSnap => renderReviewCard(panel, docSnap, 'pending'));
+                updateCount('tabCountPending', 'statPending', snap.size);
+
+            } catch (err) {
+                console.error('Error loading pending:', err);
+                panel.innerHTML = '<p style="color:var(--red); padding:1rem 0;">Error loading reviews. Check Firestore rules.</p>';
+            }
+        }
+
+        // ---- Load approved reviews ----
+        async function loadApproved() {
+            const panel = document.getElementById('panel-approved');
+            panel.innerHTML = '<p style="color:var(--muted-text); padding:1rem 0;">Loading…</p>';
+
+            try {
+                const q = query(
+                    collection(db, 'reviews'),
+                    where('status', '==', 'approved'),
+                    orderBy('approvedAt', 'desc')
+                );
+                const snap = await getDocs(q);
+
+                if (snap.empty) {
+                    panel.innerHTML = '<div class="panel-empty"><div>📭</div><h3>No approved reviews yet.</h3><p>Approve some pending reviews to publish them.</p></div>';
+                    updateCount('tabCountApproved', 'statApproved', 0);
+                    return;
+                }
+
+                panel.innerHTML = '';
+                snap.forEach(docSnap => renderReviewCard(panel, docSnap, 'approved'));
+                updateCount('tabCountApproved', 'statApproved', snap.size);
+
+            } catch (err) {
+                console.error('Error loading approved:', err);
+                panel.innerHTML = '<p style="color:var(--red); padding:1rem 0;">Error loading reviews. Check Firestore rules.</p>';
+            }
+        }
+
+        // ---- Render a review management card ----
+        function renderReviewCard(panel, docSnap, status) {
+            const r = docSnap.data();
+            const id = docSnap.id;
+            const stars = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
+            const date = r.submittedAt?.toDate().toLocaleDateString('en-US', {
+                year: 'numeric', month: 'long', day: 'numeric'
+            }) ?? 'Unknown date';
+
+            const card = document.createElement('div');
+            card.className = 'review-manage-card';
+            card.dataset.id = id;
+
+            const approveBtn = status === 'pending'
+                ? `<button class="btn btn-primary" data-action="approve" data-id="${id}">✓ Approve</button>`
+                : '';
+
+            card.innerHTML = `
+            <div>
+              <div class="review-manage-card__meta">
+                <span class="review-manage-card__stars">${stars}</span>
+                <span class="badge badge-${status}">${status.charAt(0).toUpperCase() + status.slice(1)}</span>
+              </div>
+              <p class="review-manage-card__text">"${escHtml(r.reviewText)}"</p>
+              <div class="review-manage-card__author">${escHtml(r.name)}${r.genre ? ' — ' + escHtml(r.genre) : ''}</div>
+              <div class="review-manage-card__date">Submitted: ${date}</div>
+            </div>
+            <div class="review-actions">
+              ${approveBtn}
+              <button class="btn btn-outline" style="border-color:var(--red);color:var(--red);"
+                data-action="delete" data-id="${id}">✕ Delete</button>
+            </div>`;
+
+            // Wire buttons
+            card.querySelector('[data-action="delete"]').addEventListener('click', () => deleteReview(id, card));
+            const approveEl = card.querySelector('[data-action="approve"]');
+            if (approveEl) approveEl.addEventListener('click', () => approveReview(id, card));
+
+            panel.appendChild(card);
+        }
+
+        // ---- Approve ----
+        async function approveReview(id, card) {
+            card.style.opacity = '0.5';
+            try {
+                await updateDoc(doc(db, 'reviews', id), {
+                    status: 'approved',
+                    approvedAt: serverTimestamp()
+                });
+                // Reload both panels to reflect the move
+                await loadAllData();
+            } catch (err) {
+                console.error('Approve error:', err);
+                card.style.opacity = '1';
+                alert('Could not approve review. Please try again.');
+            }
+        }
+
+        // ---- Delete ----
+        async function deleteReview(id, card) {
+            if (!confirm('Delete this review permanently? This cannot be undone.')) return;
+            card.style.opacity = '0.5';
+            try {
+                await deleteDoc(doc(db, 'reviews', id));
+                card.remove();
+                // Recount after removal
+                const pendingCount = document.querySelectorAll('#panel-pending .review-manage-card').length;
+                const approvedCount = document.querySelectorAll('#panel-approved .review-manage-card').length;
+                updateCount('tabCountPending', 'statPending', pendingCount);
+                updateCount('tabCountApproved', 'statApproved', approvedCount);
+            } catch (err) {
+                console.error('Delete error:', err);
+                card.style.opacity = '1';
+                alert('Could not delete review. Please try again.');
+            }
+        }
+
+        // ---- Helpers ----
+        function updateCount(tabId, statId, count) {
+            document.getElementById(tabId).textContent = count;
+            document.getElementById(statId).textContent = count;
+        }
+
+        function escHtml(str) {
+            const d = document.createElement('div');
+            d.textContent = str;
+            return d.innerHTML;
+        }
+
+    </script>
+</body>
+</html>

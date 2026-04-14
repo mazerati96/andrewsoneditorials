@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About — Andrewson Editorials</title>
+    <meta name="description" content="Meet Andrew Agada — the editor and beta reader behind Andrewson Editorials." />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+        .about-hero {
+            background-color: var(--navy);
+            padding: 5rem 0 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+            .about-hero::before {
+                content: '';
+                position: absolute;
+                top: -80px;
+                right: -80px;
+                width: 400px;
+                height: 400px;
+                border-radius: 50%;
+                background: radial-gradient(circle, rgba(230,57,46,0.12) 0%, transparent 70%);
+                pointer-events: none;
+            }
+
+        .about-hero__inner {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 4rem;
+            align-items: flex-end;
+        }
+
+        .about-hero__text {
+            padding-bottom: 4rem;
+        }
+
+            .about-hero__text .hero__eyebrow span {
+                color: rgba(255,255,255,0.55);
+            }
+
+            .about-hero__text .hero__eyebrow-line {
+                background: var(--red);
+            }
+
+            .about-hero__text h1 {
+                color: var(--white);
+                margin: 0.75rem 0 1.25rem;
+            }
+
+                .about-hero__text h1 em {
+                    font-style: italic;
+                    color: rgba(230,57,46,0.9);
+                }
+
+            .about-hero__text .lead {
+                color: rgba(255,255,255,0.75);
+                max-width: 520px;
+            }
+
+        .about-hero__logo-block {
+            background: var(--white);
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+            padding: 2.5rem 2.5rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .about-hero__logo-block img {
+                width: 85%;
+                object-fit: contain;
+            }
+
+        /* Values */
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .value-card {
+            text-align: center;
+            padding: 2.5rem 1.75rem;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            transition: box-shadow var(--transition), transform var(--transition);
+        }
+
+            .value-card:hover {
+                box-shadow: var(--shadow-md);
+                transform: translateY(-3px);
+            }
+
+        .value-card__icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .value-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .value-card p {
+            font-size: 0.92rem;
+            color: var(--muted-text);
+        }
+
+        /* Process */
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0;
+            position: relative;
+        }
+
+            .process-steps::before {
+                content: '';
+                position: absolute;
+                top: 28px;
+                left: calc(12.5% + 14px);
+                right: calc(12.5% + 14px);
+                height: 2px;
+                background: var(--border);
+                z-index: 0;
+            }
+
+        .process-step {
+            text-align: center;
+            padding: 0 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .process-step__num {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--navy);
+            color: var(--white);
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.25rem;
+            border: 3px solid var(--cream);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .process-step h4 {
+            font-size: 0.95rem;
+            color: var(--navy);
+            margin-bottom: 0.5rem;
+        }
+
+        .process-step p {
+            font-size: 0.85rem;
+            color: var(--muted-text);
+        }
+
+        /* Genres */
+        .genre-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-top: 1.25rem;
+        }
+
+        .genre-tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.4rem 1rem;
+            background: var(--navy-muted);
+            border: 1.5px solid rgba(10,37,64,0.15);
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--navy);
+        }
+
+        /* Fun facts */
+        .fun-facts {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .fun-fact {
+            background: var(--cream);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 1.25rem;
+            display: flex;
+            gap: 0.85rem;
+            align-items: flex-start;
+        }
+
+        .fun-fact__emoji {
+            font-size: 1.6rem;
+            flex-shrink: 0;
+        }
+
+        .fun-fact strong {
+            display: block;
+            font-size: 0.88rem;
+            color: var(--navy);
+            margin-bottom: 0.15rem;
+        }
+
+        .fun-fact span {
+            font-size: 0.82rem;
+            color: var(--muted-text);
+        }
+
+        @media (max-width: 960px) {
+            .about-hero__inner {
+                grid-template-columns: 1fr;
+            }
+
+            .about-hero__logo-block {
+                display: none;
+            }
+
+            .about-hero {
+                padding-bottom: 4rem;
+            }
+
+            .values-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .process-steps {
+                grid-template-columns: 1fr 1fr;
+                gap: 1.5rem;
+            }
+
+                .process-steps::before {
+                    display: none;
+                }
+        }
+
+        @media (max-width: 580px) {
+            .values-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .process-steps {
+                grid-template-columns: 1fr;
+            }
+
+            .fun-facts {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========== NAVIGATION ========== -->
+    <nav class="nav" role="navigation" aria-label="Main navigation">
+        <div class="nav__inner">
+            <a href="index.html" class="nav__logo" aria-label="Andrewson Editorials Home">
+                <img src="andrewson.jpg" alt="Andrewson Editorials" />
+            </a>
+            <ul class="nav__links" id="navLinks" role="list">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html" class="active">About</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="portfolio.html">Portfolio</a></li>
+                <li><a href="reviews.html">Reviews</a></li>
+                <li><a href="hire-me.html">Hire Me</a></li>
+                <li><a href="login.html" class="nav__cta btn btn-primary" style="padding:0.55rem 1.25rem; letter-spacing:0.04em;">Editor Sign In</a></li>
+            </ul>
+            <button class="nav__hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ========== HERO ========== -->
+    <section class="about-hero">
+        <div class="container">
+            <div class="about-hero__inner">
+                <div class="about-hero__text animate-fade-up">
+                    <div class="hero__eyebrow">
+                        <span class="hero__eyebrow-line"></span>
+                        <span>The Editor Behind the Page</span>
+                    </div>
+                    <h1>Hi, I'm Andrew.<br /><em>I read for a living —</em><br />and I love every word of it.</h1>
+                    <p class="lead">
+                        I'm a freelance editor and beta reader with a deep passion for helping
+                        writers shape their stories into the best versions of themselves.
+                        Whether your manuscript is a rough diamond or a near-final draft,
+                        I bring the same care, attention, and honesty to every page.
+                    </p>
+                </div>
+                <div class="about-hero__logo-block">
+                    <img src="andrewson.jpg" alt="Andrewson Editorials" />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="divider--red" />
+
+    <!-- ========== MY STORY ========== -->
+    <section class="section section--white">
+        <div class="container">
+            <div class="grid-2" style="gap:5rem; align-items:center;">
+                <div>
+                    <span class="section-label">My Story</span>
+                    <h2>A lifelong reader who decided to make it official.</h2>
+                </div>
+                <div>
+                    <!-- PLACEHOLDER: Replace with Andrew's real background -->
+                    <p class="lead">
+                        I've been a reader my whole life — the kind of person who finishes a
+                        book and immediately wants to talk about it with anyone who'll listen.
+                        At some point I realised that what I loved most about reading was the
+                        craft behind it: how a well-placed paragraph can break your heart, how
+                        a single line of dialogue can reveal everything about a character.
+                    </p>
+                    <p class="mt-3" style="color:var(--muted-text);">
+                        That passion led me to editorial work. I refined my eye through years
+                        of voracious reading across genres and hands-on experience with writers
+                        at every stage of their journey — from debut novelists finding their voice
+                        to seasoned authors pushing their work to new heights.
+                    </p>
+                    <p class="mt-3" style="color:var(--muted-text);">
+                        Today, Andrewson Editorials is my full-time focus. Every manuscript I
+                        take on gets my complete attention — no shortcuts, no generic feedback,
+                        no rushing. Just honest, thoughtful work in service of your story.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- ========== VALUES ========== -->
+    <section class="section section--cream">
+        <div class="container">
+            <div class="section-header centered">
+                <span class="section-label">How I Work</span>
+                <h2>The three things I bring to every manuscript</h2>
+            </div>
+            <div class="values-grid">
+                <div class="value-card">
+                    <span class="value-card__icon">🎯</span>
+                    <h3>Honesty</h3>
+                    <p>Kind feedback isn't the same as useful feedback. I tell you what's working and what isn't — always constructively, never harshly.</p>
+                </div>
+                <div class="value-card">
+                    <span class="value-card__icon">🔬</span>
+                    <h3>Thoroughness</h3>
+                    <p>I read as both a reader and an editor — catching what pulls me out of the story and why, down to the sentence level.</p>
+                </div>
+                <div class="value-card">
+                    <span class="value-card__icon">💡</span>
+                    <h3>Collaboration</h3>
+                    <p>It's your story, your voice, your vision. My job is to help you realise it fully — not to rewrite it in my image.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- ========== GENRES + FUN FACTS ========== -->
+    <section class="section section--white">
+        <div class="container">
+            <div class="grid-2" style="gap:5rem; align-items:flex-start;">
+                <div>
+                    <span class="section-label">Specialisms</span>
+                    <h2>Genres I know and love</h2>
+                    <!-- PLACEHOLDER: Update with Andrew's actual preferred genres -->
+                    <p class="mt-3" style="color:var(--muted-text);">
+                        I work across a wide range of genres but have a particular fondness for
+                        speculative fiction, YA, and character-driven literary work. If your genre
+                        isn't listed, reach out — if it's a good fit, I'll say so.
+                    </p>
+                    <div class="genre-tags">
+                        <span class="genre-tag">Fantasy</span>
+                        <span class="genre-tag">Science Fiction</span>
+                        <span class="genre-tag">Young Adult</span>
+                        <span class="genre-tag">Literary Fiction</span>
+                        <span class="genre-tag">Romance</span>
+                        <span class="genre-tag">Thriller</span>
+                        <span class="genre-tag">Horror</span>
+                        <span class="genre-tag">Contemporary</span>
+                        <span class="genre-tag">Mystery</span>
+                        <span class="genre-tag">New Adult</span>
+                    </div>
+                </div>
+                <div>
+                    <span class="section-label">Quick Facts</span>
+                    <h2>A little more about me</h2>
+                    <div class="fun-facts mt-3">
+                        <div class="fun-fact">
+                            <span class="fun-fact__emoji">📚</span>
+                            <div><strong>Avid Reader</strong><span>50+ books per year across every genre imaginable</span></div>
+                        </div>
+                        <div class="fun-fact">
+                            <span class="fun-fact__emoji">✍️</span>
+                            <div><strong>Writer Too</strong><span>I write fiction myself — I know what it feels like on the other side of the edit</span></div>
+                        </div>
+                        <div class="fun-fact">
+                            <span class="fun-fact__emoji">⏱</span>
+                            <div><strong>Responsive</strong><span>Reply within 2–3 business days, every time</span></div>
+                        </div>
+                        <div class="fun-fact">
+                            <span class="fun-fact__emoji">🌍</span>
+                            <div><strong>Works Remotely</strong><span>Happy to work with writers anywhere in the world</span></div>
+                        </div>
+                        <div class="fun-fact">
+                            <span class="fun-fact__emoji">🤝</span>
+                            <div><strong>No Obligation</strong><span>Free initial consultation before any commitment</span></div>
+                        </div>
+                        <div class="fun-fact">
+                            <span class="fun-fact__emoji">🔒</span>
+                            <div><strong>Confidential</strong><span>Your manuscript stays completely private, always</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- ========== PROCESS ========== -->
+    <section class="section section--cream">
+        <div class="container">
+            <div class="section-header centered">
+                <span class="section-label">The Process</span>
+                <h2>What working together looks like</h2>
+            </div>
+            <div class="process-steps">
+                <div class="process-step">
+                    <div class="process-step__num">1</div>
+                    <h4>You Reach Out</h4>
+                    <p>Fill out the inquiry form with your manuscript details and what you're looking for.</p>
+                </div>
+                <div class="process-step">
+                    <div class="process-step__num">2</div>
+                    <h4>We Chat</h4>
+                    <p>I'll get back to you within 2–3 days to discuss your project, timeline, and fit.</p>
+                </div>
+                <div class="process-step">
+                    <div class="process-step__num">3</div>
+                    <h4>I Get to Work</h4>
+                    <p>Once we agree on scope and terms, I dive into your manuscript with full attention.</p>
+                </div>
+                <div class="process-step">
+                    <div class="process-step__num">4</div>
+                    <h4>You Level Up</h4>
+                    <p>You receive detailed, actionable feedback — and leave a better writer for it.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== CTA ========== -->
+    <section class="section section--navy">
+        <div class="container text-center">
+            <span class="section-label" style="color:rgba(255,255,255,0.5);">Ready to start?</span>
+            <h2 style="color:var(--white); margin-bottom:0.75rem;">Let's work on your manuscript together.</h2>
+            <p style="color:rgba(255,255,255,0.65); max-width:480px; margin:0 auto 2rem;">
+                I'd love to hear about your project. No pressure, no obligation — just a conversation.
+            </p>
+            <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+                <a href="hire-me.html" class="btn btn-primary btn-lg">Get in Touch</a>
+                <a href="services.html" class="btn btn-outline-white btn-lg">View Services</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== FOOTER ========== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__inner">
+                <div class="footer__brand">
+                    <img src="andrewson.jpg" alt="Andrewson Editorials" />
+                    <p>Thoughtful editorial services for writers who care about their craft.</p>
+                </div>
+                <div class="footer__col">
+                    <h5>Navigate</h5>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="services.html">Services</a></li>
+                        <li><a href="portfolio.html">Portfolio</a></li>
+                        <li><a href="reviews.html">Reviews</a></li>
+                        <li><a href="hire-me.html">Hire Me</a></li>
+                    </ul>
+                </div>
+                <div class="footer__col">
+                    <h5>Connect</h5>
+                    <ul>
+                        <li><a href="https://x.com/editorial_buddy" target="_blank" rel="noopener">Twitter / X</a></li>
+                        <li><a href="#" target="_blank" rel="noopener">Instagram</a></li>
+                        <li><a href="https://goodreads.com/andrewsoneditorial" target="_blank" rel="noopener">Goodreads</a></li>
+                        <li><a href="https://www.tiktok.com/@andrewsoneditorials" target="_blank" rel="noopener">TikTok</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer__bottom">
+                <span>&copy; <span id="year"></span> Andrewson Editorials. All rights reserved.</span>
+                <span>Built with care.</span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

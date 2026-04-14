@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Editor Sign In — Andrewson Editorials</title>
+    <meta name="description" content="Editor dashboard login." />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+        /* Login page is intentionally minimal — full-screen centered */
+        body {
+            background-color: var(--cream);
+        }
+
+        .login-page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .login-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            padding: 3rem 2.75rem;
+            width: 100%;
+            max-width: 420px;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .login-card::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 4px;
+                background: linear-gradient(90deg, var(--navy), var(--red));
+            }
+
+        .login-card__logo {
+            display: block;
+            margin: 0 auto 2rem;
+            height: 48px;
+            width: auto;
+        }
+
+        .login-card h2 {
+            text-align: center;
+            font-size: 1.5rem;
+            margin-bottom: 0.35rem;
+        }
+
+        .login-card__sub {
+            text-align: center;
+            color: var(--muted-text);
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+
+        .login-error {
+            background: rgba(230, 57, 46, 0.08);
+            border: 1px solid rgba(230, 57, 46, 0.25);
+            border-radius: var(--radius-sm);
+            color: var(--red);
+            font-size: 0.88rem;
+            font-weight: 700;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1.25rem;
+            display: none;
+        }
+
+            .login-error.visible {
+                display: block;
+            }
+
+        .login-btn {
+            width: 100%;
+            justify-content: center;
+            margin-top: 0.5rem;
+        }
+
+        .login-back {
+            display: block;
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.88rem;
+            color: var(--muted-text);
+            transition: color var(--transition);
+        }
+
+            .login-back:hover {
+                color: var(--navy);
+            }
+
+        .login-divider {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 2rem 0 1.5rem;
+        }
+
+        .login-footer-note {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--muted-text);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-page">
+        <div class="login-card animate-fade-up">
+
+            <img src="andrewson.jpg" alt="Andrewson Editorials" class="login-card__logo" />
+
+            <h2>Editor Sign In</h2>
+            <p class="login-card__sub">Dashboard access is restricted to the site editor.</p>
+
+            <!-- Error message (shown on bad credentials) -->
+            <div class="login-error" id="loginError" role="alert">
+                Incorrect email or password. Please try again.
+            </div>
+
+            <div id="loginForm">
+                <div class="form-group">
+                    <label class="form-label" for="email">Email Address</label>
+                    <input class="form-input"
+                           type="email"
+                           id="email"
+                           name="email"
+                           placeholder="you@example.com"
+                           autocomplete="email"
+                           required />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="password">Password</label>
+                    <input class="form-input"
+                           type="password"
+                           id="password"
+                           name="password"
+                           placeholder="••••••••••"
+                           autocomplete="current-password"
+                           required />
+                </div>
+
+                <button class="btn btn-primary btn-lg login-btn" id="loginBtn" type="button">
+                    Sign In
+                </button>
+            </div>
+
+            <hr class="login-divider" />
+            <p class="login-footer-note">
+                Not the editor? <a href="index.html" style="color:var(--red); font-weight:700;">Go back home ↗</a>
+            </p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script type="module">
+        // ============================================
+        //  LOGIN — Firebase Auth (live)
+        // ============================================
+        import { auth } from './firebase-config.js';
+        import {
+            signInWithEmailAndPassword,
+            onAuthStateChanged
+        } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+
+        // If already signed in, skip straight to dashboard
+        onAuthStateChanged(auth, user => {
+            if (user) window.location.href = 'dashboard.html';
+        });
+
+        const loginBtn = document.getElementById('loginBtn');
+        const emailInput = document.getElementById('email');
+        const passInput = document.getElementById('password');
+        const errorBox = document.getElementById('loginError');
+
+        loginBtn.addEventListener('click', handleLogin);
+
+        [emailInput, passInput].forEach(el => {
+            el.addEventListener('keydown', e => {
+                if (e.key === 'Enter') handleLogin();
+            });
+        });
+
+        async function handleLogin() {
+            errorBox.classList.remove('visible');
+            loginBtn.textContent = 'Signing in…';
+            loginBtn.disabled = true;
+
+            try {
+                await signInWithEmailAndPassword(auth, emailInput.value.trim(), passInput.value);
+                window.location.href = 'dashboard.html';
+            } catch (err) {
+                console.error('Login error:', err.code);
+                errorBox.textContent = friendlyError(err.code);
+                errorBox.classList.add('visible');
+                loginBtn.textContent = 'Sign In';
+                loginBtn.disabled = false;
+            }
+        }
+
+        function friendlyError(code) {
+            switch (code) {
+                case 'auth/invalid-credential':
+                case 'auth/wrong-password':
+                case 'auth/user-not-found':
+                    return 'Incorrect email or password. Please try again.';
+                case 'auth/too-many-requests':
+                    return 'Too many attempts. Please wait a moment and try again.';
+                case 'auth/invalid-email':
+                    return 'Please enter a valid email address.';
+                default:
+                    return 'Something went wrong. Please try again.';
+            }
+        }
+    </script>
+</body>
+</html>

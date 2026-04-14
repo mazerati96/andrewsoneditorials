@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portfolio — Andrewson Editorials</title>
+    <meta name="description" content="See real before & after manuscript editing examples from Andrewson Editorials." />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+        .ba-section {
+            margin-bottom: 4rem;
+        }
+
+            .ba-section:last-of-type {
+                margin-bottom: 0;
+            }
+
+        .ba-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 2rem;
+            margin-bottom: 1.75rem;
+            flex-wrap: wrap;
+        }
+
+        .ba-header__meta {
+            flex: 1;
+        }
+
+        .ba-meta-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 0.6rem;
+        }
+
+        .ba-tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.3rem 0.75rem;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .ba-tag--genre {
+            background: var(--navy-muted);
+            color: var(--navy);
+        }
+
+        .ba-tag--service {
+            background: rgba(230,57,46,0.08);
+            color: var(--red);
+        }
+
+        .ba-toggle-btns {
+            display: flex;
+            background: var(--cream-dark);
+            border-radius: var(--radius-sm);
+            padding: 4px;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+
+        .ba-toggle-btn {
+            padding: 0.5rem 1.25rem;
+            border: none;
+            border-radius: calc(var(--radius-sm) - 2px);
+            font-family: var(--font-body);
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            cursor: pointer;
+            background: transparent;
+            color: var(--muted-text);
+            transition: background var(--transition), color var(--transition), box-shadow var(--transition);
+        }
+
+            .ba-toggle-btn.active {
+                background: var(--white);
+                color: var(--navy);
+                box-shadow: var(--shadow-sm);
+            }
+
+                .ba-toggle-btn.active.after {
+                    color: var(--red);
+                }
+
+        .ba-panel {
+            display: none;
+            background: var(--white);
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 2.5rem;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+        }
+
+            .ba-panel.visible {
+                display: block;
+            }
+
+        .ba-panel--after {
+            border-color: rgba(230,57,46,0.2);
+        }
+
+        .ba-panel__label {
+            position: absolute;
+            top: 1.25rem;
+            right: 1.5rem;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--muted-text);
+        }
+
+        .ba-panel--after .ba-panel__label {
+            color: var(--red);
+        }
+
+        .ba-panel__stripe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--border);
+        }
+
+        .ba-panel--after .ba-panel__stripe {
+            background: var(--red);
+        }
+
+        .ba-panel__text {
+            font-family: var(--font-display);
+            font-size: 1.05rem;
+            line-height: 1.9;
+            color: var(--body-text);
+            padding-left: 1rem;
+        }
+
+            .ba-panel__text mark {
+                background: rgba(230,57,46,0.12);
+                color: var(--red);
+                border-radius: 2px;
+                padding: 0 2px;
+            }
+
+        .ba-notes {
+            margin-top: 1.25rem;
+            background: var(--cream);
+            border-radius: var(--radius-sm);
+            padding: 1rem 1.25rem;
+            display: flex;
+            gap: 0.75rem;
+            align-items: flex-start;
+        }
+
+        .ba-notes__icon {
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            margin-top: 0.1rem;
+        }
+
+        .ba-notes__text {
+            font-size: 0.875rem;
+            color: var(--muted-text);
+            line-height: 1.65;
+        }
+
+            .ba-notes__text strong {
+                color: var(--navy);
+            }
+
+        .portfolio-divider {
+            border: none;
+            border-top: 1px dashed var(--border);
+            margin: 3.5rem 0;
+        }
+
+        .portfolio-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            margin-bottom: 4rem;
+        }
+
+        .portfolio-stat {
+            background: var(--white);
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+
+        .portfolio-stat__num {
+            display: block;
+            font-family: var(--font-display);
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--navy);
+            line-height: 1;
+            margin-bottom: 0.35rem;
+        }
+
+        .portfolio-stat__label {
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--muted-text);
+        }
+
+        @media (max-width: 720px) {
+            .portfolio-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .ba-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .ba-panel__text {
+                font-size: 0.97rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .ba-panel {
+                padding: 1.75rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========== NAVIGATION ========== -->
+    <nav class="nav" role="navigation" aria-label="Main navigation">
+        <div class="nav__inner">
+            <a href="index.html" class="nav__logo" aria-label="Andrewson Editorials Home">
+                <img src="andrewson.jpg" alt="Andrewson Editorials" />
+            </a>
+            <ul class="nav__links" id="navLinks" role="list">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="portfolio.html" class="active">Portfolio</a></li>
+                <li><a href="reviews.html">Reviews</a></li>
+                <li><a href="hire-me.html">Hire Me</a></li>
+                <li><a href="login.html" class="nav__cta btn btn-primary" style="padding:0.55rem 1.25rem; letter-spacing:0.04em;">Editor Sign In</a></li>
+            </ul>
+            <button class="nav__hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ========== PAGE HERO ========== -->
+    <section class="page-hero">
+        <div class="container">
+            <div class="hero__eyebrow animate-fade-up">
+                <span class="hero__eyebrow-line"></span>
+                <span>Before &amp; After</span>
+            </div>
+            <h1 class="animate-fade-up animate-delay-1">Portfolio</h1>
+            <p class="lead animate-fade-up animate-delay-2">
+                The best way to understand what editorial work does is to see it in action.
+                Toggle between original and edited versions to see the difference a
+                thoughtful edit makes.
+            </p>
+        </div>
+    </section>
+
+    <hr class="divider--red" />
+
+    <!-- ========== PORTFOLIO CONTENT ========== -->
+    <section class="section section--cream">
+        <div class="container">
+
+            <!-- Stats strip -->
+            <div class="portfolio-stats">
+                <div class="portfolio-stat">
+                    <span class="portfolio-stat__num">12+</span>
+                    <span class="portfolio-stat__label">Projects Completed</span>
+                </div>
+                <div class="portfolio-stat">
+                    <span class="portfolio-stat__num">6</span>
+                    <span class="portfolio-stat__label">Genres Served</span>
+                </div>
+                <div class="portfolio-stat">
+                    <span class="portfolio-stat__num">100%</span>
+                    <span class="portfolio-stat__label">Client Satisfaction</span>
+                </div>
+                <div class="portfolio-stat">
+                    <span class="portfolio-stat__num">6</span>
+                    <span class="portfolio-stat__label">Services Offered</span>
+                </div>
+            </div>
+
+            <!-- ── Example 1: Line Editing / Fantasy ── -->
+            <div class="ba-section" id="example-1">
+                <div class="ba-header">
+                    <div class="ba-header__meta">
+                        <span class="section-label">Example 01</span>
+                        <h3>Opening scene — fantasy novel</h3>
+                        <div class="ba-meta-tags">
+                            <span class="ba-tag ba-tag--genre">Fantasy</span>
+                            <span class="ba-tag ba-tag--service">Line Editing</span>
+                        </div>
+                    </div>
+                    <div class="ba-toggle-btns" role="group" aria-label="Toggle before and after">
+                        <button class="ba-toggle-btn active" data-target="ex1" data-panel="before">Before</button>
+                        <button class="ba-toggle-btn after" data-target="ex1" data-panel="after">After</button>
+                    </div>
+                </div>
+
+                <div class="ba-panels">
+                    <div class="ba-panel visible" id="ex1-before">
+                        <span class="ba-panel__label">Original</span>
+                        <div class="ba-panel__stripe"></div>
+                        <div class="ba-panel__text">
+                            The forest was dark and it was very quiet. Mara walked through the trees carefully.
+                            She was scared. There were sounds coming from somewhere and she didn't know what
+                            they were. She kept walking even though she really didn't want to. The trees were
+                            tall and they blocked out the sky so it was hard to see. She held her lantern up
+                            high to try and see better but it didn't really help that much.
+                        </div>
+                        <div class="ba-notes">
+                            <span class="ba-notes__icon">📋</span>
+                            <div class="ba-notes__text">
+                                <strong>Editor's notes:</strong> Repetitive sentence structure (Subject + Verb, Subject + Verb).
+                                Telling rather than showing emotion ("She was scared"). Weak adverbs ("carefully", "really").
+                                Lacks sensory immersion and narrative momentum.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ba-panel ba-panel--after" id="ex1-after">
+                        <span class="ba-panel__label">Edited</span>
+                        <div class="ba-panel__stripe"></div>
+                        <div class="ba-panel__text">
+                            The forest swallowed sound. <mark>No wind. No birdsong.</mark> Only the soft crunch
+                            of Mara's boots and the hammering of her own pulse. She moved between the trunks
+                            with her lantern held high, its pale circle of light barely reaching the undergrowth.
+                            Something rustled — left, maybe, or deeper in — and she stopped breathing.
+                            <mark>Kept walking anyway.</mark>
+                        </div>
+                        <div class="ba-notes">
+                            <span class="ba-notes__icon">✏️</span>
+                            <div class="ba-notes__text">
+                                <strong>What changed:</strong> Varied sentence rhythm to build tension. Replaced telling
+                                with physical, sensory detail to show fear. Cut redundant adverbs. Used fragmentation
+                                to mirror the character's anxious state of mind.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="portfolio-divider" />
+
+            <!-- ── Example 2: Developmental / YA ── -->
+            <div class="ba-section" id="example-2">
+                <div class="ba-header">
+                    <div class="ba-header__meta">
+                        <span class="section-label">Example 02</span>
+                        <h3>Character introduction — YA contemporary</h3>
+                        <div class="ba-meta-tags">
+                            <span class="ba-tag ba-tag--genre">Young Adult</span>
+                            <span class="ba-tag ba-tag--service">Developmental Editing</span>
+                        </div>
+                    </div>
+                    <div class="ba-toggle-btns" role="group" aria-label="Toggle before and after">
+                        <button class="ba-toggle-btn active" data-target="ex2" data-panel="before">Before</button>
+                        <button class="ba-toggle-btn after" data-target="ex2" data-panel="after">After</button>
+                    </div>
+                </div>
+
+                <div class="ba-panels">
+                    <div class="ba-panel visible" id="ex2-before">
+                        <span class="ba-panel__label">Original</span>
+                        <div class="ba-panel__stripe"></div>
+                        <div class="ba-panel__text">
+                            My name is Jasmine and I'm sixteen years old. I have brown hair and brown eyes and
+                            I'm kind of average looking. I go to Westbrook High School. My best friend is called
+                            Priya and she's really pretty and outgoing unlike me. I've always been kind of shy.
+                            My parents are divorced and I live with my mom. I like reading and music and I don't
+                            really like parties or being around a lot of people.
+                        </div>
+                        <div class="ba-notes">
+                            <span class="ba-notes__icon">📋</span>
+                            <div class="ba-notes__text">
+                                <strong>Editor's notes:</strong> Classic "character dumping" — listing facts instead
+                                of revealing character through action or voice. Physical description is generic.
+                                No narrative hook. The character's internal world is flat. Readers need to be
+                                intrigued, not briefed.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ba-panel ba-panel--after" id="ex2-after">
+                        <span class="ba-panel__label">Edited</span>
+                        <div class="ba-panel__stripe"></div>
+                        <div class="ba-panel__text">
+                            The thing about being invisible is you see everything. I've been watching Priya
+                            navigate the cafeteria for three years — the way she laughs too loud near the seniors'
+                            table, how her smile goes a little tighter whenever Jake Chen walks past — and she has
+                            no idea. <mark>That's the deal with best friends who are beautiful.</mark> They forget
+                            you have eyes. I pull my earbuds in tighter and open my book. Westbrook High on a
+                            Monday morning is not something I need to experience with full sensory capacity.
+                        </div>
+                        <div class="ba-notes">
+                            <span class="ba-notes__icon">✏️</span>
+                            <div class="ba-notes__text">
+                                <strong>What changed:</strong> Opened with voice and a compelling observation instead
+                                of a fact-list. Revealed character traits (perceptive, introverted, dry wit) through
+                                action and thought. Introduced the best-friend dynamic with implied conflict and
+                                created immediate intrigue without a single biographical bullet point.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="portfolio-divider" />
+
+            <!-- ── Example 3: Copy Editing / Romance ── -->
+            <div class="ba-section" id="example-3">
+                <div class="ba-header">
+                    <div class="ba-header__meta">
+                        <span class="section-label">Example 03</span>
+                        <h3>Dialogue scene — contemporary romance</h3>
+                        <div class="ba-meta-tags">
+                            <span class="ba-tag ba-tag--genre">Romance</span>
+                            <span class="ba-tag ba-tag--service">Copy Editing</span>
+                        </div>
+                    </div>
+                    <div class="ba-toggle-btns" role="group" aria-label="Toggle before and after">
+                        <button class="ba-toggle-btn active" data-target="ex3" data-panel="before">Before</button>
+                        <button class="ba-toggle-btn after" data-target="ex3" data-panel="after">After</button>
+                    </div>
+                </div>
+
+                <div class="ba-panels">
+                    <div class="ba-panel visible" id="ex3-before">
+                        <span class="ba-panel__label">Original</span>
+                        <div class="ba-panel__stripe"></div>
+                        <div class="ba-panel__text">
+                            "I didn't mean it like that." He said, not looking at her.<br /><br />
+                            "Well that's how it came across," Maya replied back to him angrily.<br /><br />
+                            He sighed loudly. "Can we just drop it".<br /><br />
+                            "No we can't just drop it, Caleb. You said what you said." She crossed her arms
+                            across her chest and looked away from him out of the window.
+                        </div>
+                        <div class="ba-notes">
+                            <span class="ba-notes__icon">📋</span>
+                            <div class="ba-notes__text">
+                                <strong>Editor's notes:</strong> Punctuation error on first dialogue tag (capital "He" after comma).
+                                Redundant phrases ("replied back to him", "crossed her arms across her chest").
+                                Weak adverb ("angrily" — show it). Missing question mark. Clunky final sentence.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ba-panel ba-panel--after" id="ex3-after">
+                        <span class="ba-panel__label">Edited</span>
+                        <div class="ba-panel__stripe"></div>
+                        <div class="ba-panel__text">
+                            "I didn't mean it like that," he said, not looking at her.<br /><br />
+                            "Well, that's how it came across." <mark>Maya's jaw tightened.</mark><br /><br />
+                            He sighed. "Can we just drop it?"<br /><br />
+                            "No, we can't just drop it, Caleb. You said what you said." She crossed her arms
+                            and turned to the window.
+                        </div>
+                        <div class="ba-notes">
+                            <span class="ba-notes__icon">✏️</span>
+                            <div class="ba-notes__text">
+                                <strong>What changed:</strong> Fixed dialogue punctuation throughout. Removed "replied back"
+                                (redundant) and "loudly" (unnecessary). Replaced "angrily" with a physical beat that
+                                shows Maya's emotion. Tightened the final sentence by cutting redundant phrasing.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ========== NOTE SECTION ========== -->
+    <section class="section section--white">
+        <div class="container">
+            <div class="grid-2" style="gap:4rem; align-items:center;">
+                <div>
+                    <span class="section-label">A Note</span>
+                    <h2>Real client work coming as it grows.</h2>
+                    <p class="mt-3" style="color:var(--muted-text);">
+                        <!-- NOTE FOR ANDREW: Replace the illustrative examples above with
+                             real, anonymised before & after snippets from client work (with permission).
+                             The toggle system is already built — just swap the text content in. -->
+                        The examples above are illustrative of the type of work I do.
+                        As client projects grow, this page will be updated with real
+                        anonymised excerpts — shared only with full client permission.
+                        Every snippet is proof of what the right edit can do for a story.
+                    </p>
+                </div>
+                <div class="card" style="text-align:center; padding:2.5rem;">
+                    <div style="font-size:2.5rem; margin-bottom:1rem;">💬</div>
+                    <h3 style="font-size:1.2rem; margin-bottom:0.5rem;">Want your work featured here?</h3>
+                    <p style="color:var(--muted-text); font-size:0.92rem; margin-bottom:1.5rem;">
+                        Past clients whose work appears here are credited exactly as they prefer — name, pen name, or anonymously.
+                    </p>
+                    <a href="hire-me.html" class="btn btn-primary">Work With Me</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== CTA ========== -->
+    <section class="section section--navy">
+        <div class="container text-center">
+            <span class="section-label" style="color:rgba(255,255,255,0.5);">Seen enough?</span>
+            <h2 style="color:var(--white); margin-bottom:0.75rem;">Ready to see what your manuscript can become?</h2>
+            <p style="color:rgba(255,255,255,0.65); max-width:480px; margin:0 auto 2rem;">
+                Every manuscript has a better version of itself inside. Let's find it together.
+            </p>
+            <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+                <a href="hire-me.html" class="btn btn-primary btn-lg">Get in Touch</a>
+                <a href="services.html" class="btn btn-outline-white btn-lg">View Services</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== FOOTER ========== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__inner">
+                <div class="footer__brand">
+                    <img src="andrewson.jpg" alt="Andrewson Editorials" />
+                    <p>Thoughtful editorial services for writers who care about their craft.</p>
+                </div>
+                <div class="footer__col">
+                    <h5>Navigate</h5>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="services.html">Services</a></li>
+                        <li><a href="portfolio.html">Portfolio</a></li>
+                        <li><a href="reviews.html">Reviews</a></li>
+                        <li><a href="hire-me.html">Hire Me</a></li>
+                    </ul>
+                </div>
+                <div class="footer__col">
+                    <h5>Connect</h5>
+                    <ul>
+                        <li><a href="https://x.com/editorial_buddy" target="_blank" rel="noopener">Twitter / X</a></li>
+                        <li><a href="#" target="_blank" rel="noopener">Instagram</a></li>
+                        <li><a href="https://goodreads.com/andrewsoneditorial" target="_blank" rel="noopener">Goodreads</a></li>
+                        <li><a href="https://www.tiktok.com/@andrewsoneditorials" target="_blank" rel="noopener">TikTok</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer__bottom">
+                <span>&copy; <span id="year"></span> Andrewson Editorials. All rights reserved.</span>
+                <span>Built with care.</span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+    // Before / After toggle logic
+    document.querySelectorAll('.ba-toggle-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = btn.dataset.target;
+        const panel  = btn.dataset.panel;
+
+        btn.closest('.ba-toggle-btns').querySelectorAll('.ba-toggle-btn').forEach(b => {
+          b.classList.remove('active');
+        });
+        btn.classList.add('active');
+
+        const before = document.getElementById(`${target}-before`);
+        const after  = document.getElementById(`${target}-after`);
+
+        if (panel === 'before') {
+          before.classList.add('visible');    before.style.display = 'block';
+          after.classList.remove('visible');  after.style.display  = 'none';
+        } else {
+          after.classList.add('visible');     after.style.display  = 'block';
+          before.classList.remove('visible'); before.style.display = 'none';
+        }
+      });
+    });
+    </script>
+</body>
+</html>

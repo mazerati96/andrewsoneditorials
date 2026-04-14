@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Leave a Review — Andrewson Editorials</title>
+    <meta name="description" content="Share your experience working with Andrewson Editorials." />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+        body {
+            background-color: var(--cream);
+        }
+
+        .review-submit-page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 3rem 1.5rem 5rem;
+        }
+
+        .review-submit-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            padding: 3rem 2.75rem;
+            width: 100%;
+            max-width: 560px;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .review-submit-card::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 4px;
+                background: linear-gradient(90deg, var(--navy), var(--red));
+            }
+
+        .review-submit-card__logo {
+            display: block;
+            margin: 0 auto 1.75rem;
+            height: 44px;
+            width: auto;
+        }
+
+        .review-submit-card h2 {
+            text-align: center;
+            font-size: 1.6rem;
+            margin-bottom: 0.35rem;
+        }
+
+        .review-submit-card__sub {
+            text-align: center;
+            color: var(--muted-text);
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Star rating widget */
+        .star-row {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: flex-start;
+            gap: 0.25rem;
+        }
+
+            .star-row input {
+                display: none;
+            }
+
+            .star-row label {
+                font-size: 2.4rem;
+                color: var(--border);
+                cursor: pointer;
+                transition: color 0.15s ease;
+                line-height: 1;
+            }
+
+                .star-row input:checked ~ label,
+                .star-row label:hover,
+                .star-row label:hover ~ label {
+                    color: var(--red);
+                }
+
+        /* Success state */
+        .success-state {
+            text-align: center;
+            padding: 1rem 0;
+            display: none;
+        }
+
+        .success-state__icon {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .success-state h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        .success-state p {
+            color: var(--muted-text);
+            font-size: 0.95rem;
+        }
+
+        /* Error message */
+        .submit-error {
+            background: rgba(230, 57, 46, 0.08);
+            border: 1px solid rgba(230, 57, 46, 0.25);
+            border-radius: var(--radius-sm);
+            color: var(--red);
+            font-size: 0.88rem;
+            font-weight: 700;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1.25rem;
+            display: none;
+        }
+
+            .submit-error.visible {
+                display: block;
+            }
+
+        .submit-btn {
+            width: 100%;
+            justify-content: center;
+            margin-top: 0.5rem;
+        }
+
+        .char-count {
+            font-size: 0.78rem;
+            color: var(--muted-text);
+            text-align: right;
+            margin-top: 0.3rem;
+        }
+
+            .char-count.over {
+                color: var(--red);
+            }
+
+        @media (max-width: 480px) {
+            .review-submit-card {
+                padding: 2rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="review-submit-page">
+        <div class="review-submit-card animate-fade-up">
+
+            <img src="andrewson.jpg" alt="Andrewson Editorials" class="review-submit-card__logo" />
+
+            <!-- FORM STATE -->
+            <div id="formState">
+                <h2>Leave a Review</h2>
+                <p class="review-submit-card__sub">
+                    Thank you for working with me! Your review helps other writers
+                    decide if we're a good fit. All reviews are moderated before publishing.
+                </p>
+
+                <div class="submit-error" id="submitError" role="alert">
+                    Something went wrong. Please check your answers and try again.
+                </div>
+
+                <!-- Name -->
+                <div class="form-group">
+                    <label class="form-label" for="reviewName">Your Name <span style="color:var(--red)">*</span></label>
+                    <input class="form-input"
+                           type="text"
+                           id="reviewName"
+                           placeholder="e.g. J. Smith (or pen name)"
+                           maxlength="80"
+                           required />
+                </div>
+
+                <!-- Genre / Category -->
+                <div class="form-group">
+                    <label class="form-label" for="reviewGenre">Genre / Category</label>
+                    <input class="form-input"
+                           type="text"
+                           id="reviewGenre"
+                           placeholder="e.g. Fantasy, YA, Romance, Thriller…"
+                           maxlength="60" />
+                </div>
+
+                <!-- Service received -->
+                <div class="form-group">
+                    <label class="form-label" for="reviewService">Service Received <span style="color:var(--red)">*</span></label>
+                    <select class="form-select" id="reviewService" required>
+                        <option value="" disabled selected>Select a service…</option>
+                        <option>Beta Reading</option>
+                        <option>Developmental Editing</option>
+                        <option>Line Editing</option>
+                        <option>Copy Editing</option>
+                        <option>Proofreading</option>
+                        <option>Formatting</option>
+                        <option>Multiple Services</option>
+                    </select>
+                </div>
+
+                <!-- Star rating -->
+                <div class="form-group">
+                    <label class="form-label">Your Rating <span style="color:var(--red)">*</span></label>
+                    <div class="star-row" id="starRow" role="radiogroup" aria-label="Star rating">
+                        <input type="radio" name="rating" id="star5" value="5" />
+                        <label for="star5" title="5 stars">★</label>
+                        <input type="radio" name="rating" id="star4" value="4" />
+                        <label for="star4" title="4 stars">★</label>
+                        <input type="radio" name="rating" id="star3" value="3" />
+                        <label for="star3" title="3 stars">★</label>
+                        <input type="radio" name="rating" id="star2" value="2" />
+                        <label for="star2" title="2 stars">★</label>
+                        <input type="radio" name="rating" id="star1" value="1" />
+                        <label for="star1" title="1 star">★</label>
+                    </div>
+                </div>
+
+                <!-- Review text -->
+                <div class="form-group">
+                    <label class="form-label" for="reviewText">Your Review <span style="color:var(--red)">*</span></label>
+                    <textarea class="form-textarea"
+                              id="reviewText"
+                              placeholder="Tell us about your experience — what did you find most helpful?"
+                              maxlength="800"
+                              rows="5"
+                              required></textarea>
+                    <div class="char-count"><span id="charCount">0</span> / 800</div>
+                </div>
+
+                <button class="btn btn-primary btn-lg submit-btn" id="submitBtn" type="button">
+                    Submit Review
+                </button>
+
+                <p style="text-align:center; font-size:0.8rem; color:var(--muted-text); margin-top:1.25rem;">
+                    Reviews are manually approved before appearing on the site.
+                </p>
+            </div>
+
+            <!-- SUCCESS STATE -->
+            <div class="success-state" id="successState">
+                <div class="success-state__icon">🎉</div>
+                <h3>Thank you!</h3>
+                <p>
+                    Your review has been submitted and is now pending approval.
+                    Once approved, it'll appear on the Reviews page.
+                </p>
+                <a href="index.html" class="btn btn-primary mt-4" style="margin-top:2rem;">
+                    Back to Home
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script type="module">
+        // ============================================
+        //  SUBMIT REVIEW — Firebase Firestore (live)
+        // ============================================
+        import { db } from './firebase-config.js';
+        import {
+            collection,
+            addDoc,
+            serverTimestamp
+        } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+        // ---- Character counter ----
+        const textarea = document.getElementById('reviewText');
+        const charCount = document.getElementById('charCount');
+
+        textarea.addEventListener('input', () => {
+            const len = textarea.value.length;
+            charCount.textContent = len;
+            charCount.parentElement.classList.toggle('over', len >= 800);
+        });
+
+        // ---- Submit ----
+        document.getElementById('submitBtn').addEventListener('click', submitReview);
+
+        function getSelectedRating() {
+            const checked = document.querySelector('input[name="rating"]:checked');
+            return checked ? parseInt(checked.value) : null;
+        }
+
+        async function submitReview() {
+            const errorBox = document.getElementById('submitError');
+            const submitBtn = document.getElementById('submitBtn');
+            errorBox.classList.remove('visible');
+
+            const name = document.getElementById('reviewName').value.trim();
+            const genre = document.getElementById('reviewGenre').value.trim();
+            const service = document.getElementById('reviewService').value;
+            const rating = getSelectedRating();
+            const text = textarea.value.trim();
+
+            if (!name || !service || !rating || !text) {
+                errorBox.textContent = 'Please fill in all required fields and select a rating.';
+                errorBox.classList.add('visible');
+                return;
+            }
+
+            submitBtn.textContent = 'Submitting…';
+            submitBtn.disabled = true;
+
+            try {
+                await addDoc(collection(db, 'reviews'), {
+                    name,
+                    genre,
+                    service,
+                    rating,
+                    reviewText: text,
+                    status: 'pending',
+                    submittedAt: serverTimestamp()
+                });
+                showSuccess();
+            } catch (err) {
+                console.error('Firestore error:', err);
+                errorBox.textContent = 'Something went wrong. Please check your connection and try again.';
+                errorBox.classList.add('visible');
+                submitBtn.textContent = 'Submit Review';
+                submitBtn.disabled = false;
+            }
+        }
+
+        function showSuccess() {
+            document.getElementById('formState').style.display = 'none';
+            document.getElementById('successState').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

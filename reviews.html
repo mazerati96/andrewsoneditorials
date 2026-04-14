@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reviews — Andrewson Editorials</title>
+    <meta name="description" content="See what writers are saying about working with Andrewson Editorials." />
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+    <!-- ========== NAVIGATION ========== -->
+    <nav class="nav" role="navigation" aria-label="Main navigation">
+        <div class="nav__inner">
+            <a href="index.html" class="nav__logo" aria-label="Andrewson Editorials Home">
+                <img src="andrewson.jpg" alt="Andrewson Editorials" />
+            </a>
+            <ul class="nav__links" id="navLinks" role="list">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="portfolio.html">Portfolio</a></li>
+                <li><a href="reviews.html" class="active">Reviews</a></li>
+                <li><a href="hire-me.html" class="nav__cta btn btn-primary" style="padding:0.55rem 1.25rem; letter-spacing:0.04em;">Hire Me</a></li>
+            </ul>
+            <button class="nav__hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ========== PAGE HERO ========== -->
+    <section class="page-hero">
+        <div class="container">
+            <div class="hero__eyebrow animate-fade-up">
+                <span class="hero__eyebrow-line"></span>
+                <span>What Writers Say</span>
+            </div>
+            <h1 class="animate-fade-up animate-delay-1">Reviews</h1>
+            <p class="lead animate-fade-up animate-delay-2">
+                Honest words from the writers I've had the privilege of working with.
+            </p>
+        </div>
+    </section>
+
+    <hr class="divider--red" />
+
+    <!-- ========== STATS BAR ========== -->
+    <section class="section section--white" style="padding: 2.5rem 0;">
+        <div class="container">
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <span class="stat-number" id="totalReviews">—</span>
+                    <span class="stat-label">Total Reviews</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-number" id="avgRating">—</span>
+                    <span class="stat-label">Average Rating</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-number">100%</span>
+                    <span class="stat-label">Would Recommend</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- ========== REVIEWS GRID ========== -->
+    <section class="section section--cream">
+        <div class="container">
+
+            <!-- Loading state -->
+            <div id="reviewsLoading" class="reviews-loading">
+                <div class="loading-spinner"></div>
+                <p>Loading reviews…</p>
+            </div>
+
+            <!-- Empty state (shown if no approved reviews yet) -->
+            <div id="reviewsEmpty" class="reviews-empty" style="display:none;">
+                <div style="font-size:3rem; margin-bottom:1rem;">📭</div>
+                <h3>No reviews yet</h3>
+                <p style="color:var(--muted-text);">Be the first to share your experience!</p>
+            </div>
+
+            <!-- Reviews grid — populated by JS from Firestore -->
+            <div class="grid-3" id="reviewsGrid" style="display:none;">
+
+                <!-- =====================================================
+                     PLACEHOLDER CARDS — visible until Firebase is live.
+                     Remove or comment these out once Firestore is wired.
+                     ===================================================== -->
+                <div class="review-card">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-card__text">
+                        Working with Andrewson Editorials was exactly what my manuscript
+                        needed. The feedback was detailed, thoughtful, and helped me see
+                        my story in a whole new light.
+                    </p>
+                    <div class="review-card__author">
+                        <div class="review-card__author-initial">S</div>
+                        <div class="review-card__author-info">
+                            <strong>S. Morgan</strong>
+                            <span>Fantasy Author</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-card__text">
+                        I've worked with several editors, but the attention to detail here
+                        was unmatched. My characters finally feel like they belong in the
+                        world I built.
+                    </p>
+                    <div class="review-card__author">
+                        <div class="review-card__author-initial">T</div>
+                        <div class="review-card__author-info">
+                            <strong>T. Rivera</strong>
+                            <span>YA Writer</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-card__text">
+                        Kind, constructive, and incredibly thorough. I walked away from
+                        every feedback session feeling motivated instead of overwhelmed.
+                    </p>
+                    <div class="review-card__author">
+                        <div class="review-card__author-initial">J</div>
+                        <div class="review-card__author-info">
+                            <strong>J. Park</strong>
+                            <span>Romance Novelist</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-card__text">
+                        The developmental edit transformed my draft entirely. Andrew has
+                        a real gift for seeing what a story wants to become — not just
+                        what it currently is.
+                    </p>
+                    <div class="review-card__author">
+                        <div class="review-card__author-initial">M</div>
+                        <div class="review-card__author-info">
+                            <strong>M. Chen</strong>
+                            <span>Literary Fiction</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-card__text">
+                        I was nervous to share my first draft with anyone, but the whole
+                        experience felt safe and encouraging. The feedback was honest
+                        without ever being unkind.
+                    </p>
+                    <div class="review-card__author">
+                        <div class="review-card__author-initial">A</div>
+                        <div class="review-card__author-info">
+                            <strong>A. Osei</strong>
+                            <span>Debut Novelist</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review-card">
+                    <div class="review-stars">★★★★★</div>
+                    <p class="review-card__text">
+                        Incredibly thorough proofreading pass. Found things three previous
+                        readers had completely missed. I submitted to agents the next week
+                        feeling genuinely confident.
+                    </p>
+                    <div class="review-card__author">
+                        <div class="review-card__author-initial">R</div>
+                        <div class="review-card__author-info">
+                            <strong>R. Nakamura</strong>
+                            <span>Thriller Writer</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- END reviews grid -->
+
+        </div>
+    </section>
+
+    <!-- ========== CTA ========== -->
+    <section class="section section--navy">
+        <div class="container text-center">
+            <span class="section-label" style="color:rgba(255,255,255,0.5);">Ready?</span>
+            <h2 style="color:var(--white); margin-bottom:0.75rem;">
+                Let's make your story the best it can be.
+            </h2>
+            <p style="color:rgba(255,255,255,0.65); max-width:480px; margin:0 auto 2rem;">
+                Join the writers who've already levelled up their manuscripts.
+            </p>
+            <a href="hire-me.html" class="btn btn-primary btn-lg">Work With Me</a>
+        </div>
+    </section>
+
+    <!-- ========== FOOTER ========== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__inner">
+                <div class="footer__brand">
+                    <img src="andrewson.jpg" alt="Andrewson Editorials" />
+                    <p>Thoughtful editorial services for writers who care about their craft.</p>
+                </div>
+                <div class="footer__col">
+                    <h5>Navigate</h5>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="services.html">Services</a></li>
+                        <li><a href="portfolio.html">Portfolio</a></li>
+                        <li><a href="reviews.html">Reviews</a></li>
+                        <li><a href="hire-me.html">Hire Me</a></li>
+                    </ul>
+                </div>
+                <div class="footer__col">
+                    <h5>Connect</h5>
+                    <ul>
+                        <li><a href="https://x.com/editorial_buddy" target="_blank" rel="noopener">Twitter / X</a></li>
+                        <li><a href="https://www.tiktok.com/@andrewsoneditorials" target="_blank" rel="noopener">TikTok</a></li>
+                        <li><a href="https://goodreads.com/andrewsoneditorial" target="_blank" rel="noopener">Goodreads</a></li>
+                        <li><a href="/cdn-cgi/l/email-protection#7e1f191f1a1f1f101a0c1b094a4a3e19131f1712501d1113">Email</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer__bottom">
+                <span>&copy; <span id="year"></span> Andrewson Editorials. All rights reserved.</span>
+                <span>Built with care.</span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script type="module">
+        // ============================================
+        //  REVIEWS PAGE — Firebase Firestore (live)
+        // ============================================
+        import { db } from './firebase-config.js';
+        import {
+            collection,
+            query,
+            where,
+            getDocs,
+            orderBy
+        } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+        async function loadReviews() {
+            const grid = document.getElementById('reviewsGrid');
+            const loading = document.getElementById('reviewsLoading');
+            const empty = document.getElementById('reviewsEmpty');
+
+            try {
+                const q = query(
+                    collection(db, 'reviews'),
+                    where('status', '==', 'approved'),
+                    orderBy('approvedAt', 'desc')
+                );
+
+                const snapshot = await getDocs(q);
+                loading.style.display = 'none';
+
+                if (snapshot.empty) {
+                    empty.style.display = 'block';
+                    return;
+                }
+
+                let total = 0, ratingSum = 0;
+                grid.innerHTML = '';
+
+                snapshot.forEach(doc => {
+                    const r = doc.data();
+                    ratingSum += r.rating;
+                    total++;
+
+                    const stars = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
+                    const initial = r.name.charAt(0).toUpperCase();
+
+                    // Sanitise text to prevent XSS
+                    const div = document.createElement('div');
+                    div.textContent = r.reviewText;
+                    const safeText = div.innerHTML;
+                    div.textContent = r.name;
+                    const safeName = div.innerHTML;
+
+                    grid.innerHTML += `
+                <div class="review-card">
+                  <div class="review-stars">${stars}</div>
+                  <p class="review-card__text">${safeText}</p>
+                  <div class="review-card__author">
+                    <div class="review-card__author-initial">${initial}</div>
+                    <div class="review-card__author-info">
+                      <strong>${safeName}</strong>
+                      <span>${r.genre || 'Writer'}</span>
+                    </div>
+                  </div>
+                </div>`;
+                });
+
+                grid.style.display = 'grid';
+                document.getElementById('totalReviews').textContent = total;
+                document.getElementById('avgRating').textContent =
+                    (ratingSum / total).toFixed(1) + ' ★';
+
+            } catch (err) {
+                console.error('Error loading reviews:', err);
+                document.getElementById('reviewsLoading').style.display = 'none';
+                document.getElementById('reviewsEmpty').style.display = 'block';
+            }
+        }
+
+        loadReviews();
+    </script>
+</body>
+</html>
