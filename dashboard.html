@@ -498,7 +498,7 @@
         import { onAuthStateChanged, signOut } from
             "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
         import {
-            collection, query, where, orderBy, getDocs,
+            collection, query, where, getDocs,
             doc, updateDoc, deleteDoc, serverTimestamp
         } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
@@ -541,8 +541,7 @@
             try {
                 const q = query(
                     collection(db, 'reviews'),
-                    where('status', '==', 'pending'),
-                    orderBy('submittedAt', 'desc')
+                    where('status', '==', 'pending')
                 );
                 const snap = await getDocs(q);
 
@@ -552,8 +551,15 @@
                     return;
                 }
 
+                // Sort client-side: newest submittedAt first
+                const docs = snap.docs.sort((a, b) => {
+                    const tA = a.data().submittedAt?.toMillis() ?? 0;
+                    const tB = b.data().submittedAt?.toMillis() ?? 0;
+                    return tB - tA;
+                });
+
                 panel.innerHTML = '';
-                snap.forEach(docSnap => renderReviewCard(panel, docSnap, 'pending'));
+                docs.forEach(docSnap => renderReviewCard(panel, docSnap, 'pending'));
                 updateCount('tabCountPending', 'statPending', snap.size);
 
             } catch (err) {
@@ -570,8 +576,7 @@
             try {
                 const q = query(
                     collection(db, 'reviews'),
-                    where('status', '==', 'approved'),
-                    orderBy('approvedAt', 'desc')
+                    where('status', '==', 'approved')
                 );
                 const snap = await getDocs(q);
 
@@ -581,8 +586,15 @@
                     return;
                 }
 
+                // Sort client-side: newest approvedAt first, fall back to submittedAt
+                const docs = snap.docs.sort((a, b) => {
+                    const tA = (a.data().approvedAt ?? a.data().submittedAt)?.toMillis() ?? 0;
+                    const tB = (b.data().approvedAt ?? b.data().submittedAt)?.toMillis() ?? 0;
+                    return tB - tA;
+                });
+
                 panel.innerHTML = '';
-                snap.forEach(docSnap => renderReviewCard(panel, docSnap, 'approved'));
+                docs.forEach(docSnap => renderReviewCard(panel, docSnap, 'approved'));
                 updateCount('tabCountApproved', 'statApproved', snap.size);
 
             } catch (err) {
@@ -609,20 +621,20 @@
                 : '';
 
             card.innerHTML = `
-            <div>
-              <div class="review-manage-card__meta">
-                <span class="review-manage-card__stars">${stars}</span>
-                <span class="badge badge-${status}">${status.charAt(0).toUpperCase() + status.slice(1)}</span>
-              </div>
-              <p class="review-manage-card__text">"${escHtml(r.reviewText)}"</p>
-              <div class="review-manage-card__author">${escHtml(r.name)}${r.genre ? ' — ' + escHtml(r.genre) : ''}</div>
-              <div class="review-manage-card__date">Submitted: ${date}</div>
-            </div>
-            <div class="review-actions">
-              ${approveBtn}
-              <button class="btn btn-outline" style="border-color:var(--red);color:var(--red);"
-                data-action="delete" data-id="${id}">✕ Delete</button>
-            </div>`;
+                <div>
+                  <div class="review-manage-card__meta">
+                    <span class="review-manage-card__stars">${stars}</span>
+                    <span class="badge badge-${status}">${status.charAt(0).toUpperCase() + status.slice(1)}</span>
+                  </div>
+                  <p class="review-manage-card__text">"${escHtml(r.reviewText)}"</p>
+                  <div class="review-manage-card__author">${escHtml(r.name)}${r.genre ? ' — ' + escHtml(r.genre) : ''}</div>
+                  <div class="review-manage-card__date">Submitted: ${date}</div>
+                </div>
+                <div class="review-actions">
+                  ${approveBtn}
+                  <button class="btn btn-outline" style="border-color:var(--red);color:var(--red);"
+                    data-action="delete" data-id="${id}">✕ Delete</button>
+                </div>`;
 
             // Wire buttons
             card.querySelector('[data-action="delete"]').addEventListener('click', () => deleteReview(id, card));
