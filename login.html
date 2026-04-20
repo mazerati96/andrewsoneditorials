@@ -111,6 +111,42 @@
             font-size: 0.8rem;
             color: var(--muted-text);
         }
+
+        /* ---- Password toggle ---- */
+        .password-wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+            .password-wrap .form-input {
+                padding-right: 3rem;
+            }
+
+        .password-toggle {
+            position: absolute;
+            right: 0.75rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.25rem;
+            color: var(--muted-text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color var(--transition);
+            line-height: 0;
+        }
+
+            .password-toggle:hover {
+                color: var(--navy);
+            }
+
+            .password-toggle svg {
+                width: 18px;
+                height: 18px;
+                display: block;
+            }
     </style>
 </head>
 <body>
@@ -164,6 +200,21 @@
     </div>
 
     <script src="script.js"></script>
+    <script>
+        // ---- Password show / hide toggle ----
+        const toggleBtn = document.getElementById('togglePassword');
+        const passField = document.getElementById('password');
+        const eyeOpen = document.getElementById('eyeOpen');
+        const eyeClosed = document.getElementById('eyeClosed');
+
+        toggleBtn.addEventListener('click', () => {
+            const isHidden = passField.type === 'password';
+            passField.type = isHidden ? 'text' : 'password';
+            eyeOpen.style.display = isHidden ? 'none' : 'block';
+            eyeClosed.style.display = isHidden ? 'block' : 'none';
+            toggleBtn.setAttribute('aria-label', isHidden ? 'Hide password' : 'Show password');
+        });
+    </script>
     <script type="module">
         // ============================================
         //  LOGIN — Firebase Auth (live)
