@@ -208,7 +208,10 @@
             <p style="color:rgba(255,255,255,0.65); max-width:480px; margin:0 auto 2rem;">
                 Join the writers who've already levelled up their manuscripts.
             </p>
-            <a href="hire-me.html" class="btn btn-primary btn-lg">Work With Me</a>
+            <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+                <a href="hire-me.html" class="btn btn-primary btn-lg">Work With Me</a>
+                <a href="submit-review.html" class="btn btn-outline btn-lg" style="border-color:rgba(255,255,255,0.45); color:var(--white);">Leave a Review ★</a>
+            </div>
         </div>
     </section>
 
@@ -301,17 +304,17 @@
                     const safeName = div.innerHTML;
 
                     grid.innerHTML += `
-                <div class="review-card">
-                  <div class="review-stars">${stars}</div>
-                  <p class="review-card__text">${safeText}</p>
-                  <div class="review-card__author">
-                    <div class="review-card__author-initial">${initial}</div>
-                    <div class="review-card__author-info">
-                      <strong>${safeName}</strong>
-                      <span>${r.genre || 'Writer'}</span>
-                    </div>
-                  </div>
-                </div>`;
+                    <div class="review-card">
+                      <div class="review-stars">${stars}</div>
+                      <p class="review-card__text">${safeText}</p>
+                      <div class="review-card__author">
+                        <div class="review-card__author-initial">${initial}</div>
+                        <div class="review-card__author-info">
+                          <strong>${safeName}</strong>
+                          <span>${r.genre || 'Writer'}</span>
+                        </div>
+                      </div>
+                    </div>`;
                 });
 
                 grid.style.display = 'grid';
